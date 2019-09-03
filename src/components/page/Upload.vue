@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-date"></i> 表单</el-breadcrumb-item>
+                <el-breadcrumb-item><i class="el-icon-lx-calendar"></i> 表单</el-breadcrumb-item>
                 <el-breadcrumb-item>图片上传</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -15,7 +15,7 @@
             <el-upload
                 class="upload-demo"
                 drag
-                action="/api/posts/"
+                action="http://jsonplaceholder.typicode.com/api/posts/"
                 multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -50,7 +50,7 @@
         name: 'upload',
         data: function(){
             return {
-                defaultSrc: './static/img/img.jpg',
+                defaultSrc: require('../../assets/img/img.jpg'),
                 fileList: [],
                 imgSrc: '',
                 cropImg: '',

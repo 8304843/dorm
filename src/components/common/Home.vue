@@ -10,6 +10,7 @@
                         <router-view></router-view>
                     </keep-alive>
                 </transition>
+                <el-backtop target=".content"></el-backtop>
             </div>
         </div>
     </div>
@@ -46,12 +47,3 @@
         }
     }
 </script>
-<style scoped>
-.content {
-padding: 10px !important;
-}
-.content-box {
-left: 150px !important;
-top: 60px !important;
-}
-</style>

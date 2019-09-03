@@ -61,11 +61,16 @@
                 const isExist = this.tagsList.some(item => {
                     return item.path === route.fullPath;
                 })
-                !isExist && this.tagsList.push({
-                    title: route.meta.title,
-                    path: route.fullPath,
-                    name: route.matched[1].components.default.name
-                })
+                if(!isExist){
+                    if(this.tagsList.length >= 8){
+                        this.tagsList.shift();
+                    }
+                    this.tagsList.push({
+                        title: route.meta.title,
+                        path: route.fullPath,
+                        name: route.matched[1].components.default.name
+                    })
+                }
                 bus.$emit('tags', this.tagsList);
             },
             handleTags(command){
@@ -84,19 +89,39 @@
         },
         created(){
             this.setTags(this.$route);
+            // 监听关闭当前页面的标签页
+            bus.$on('close_current_tags', () => {
+                for (let i = 0, len = this.tagsList.length; i < len; i++) {
+                    const item = this.tagsList[i];
+                    if(item.path === this.$route.fullPath){
+                        if(i < len - 1){
+                            this.$router.push(this.tagsList[i+1].path);
+                        }else if(i > 0){
+                            this.$router.push(this.tagsList[i-1].path);
+                        }else{
+                            this.$router.push('/');
+                        }
+                        this.tagsList.splice(i, 1);
+                        break;
+                    }
+                }
+            })
         }
     }
 
 </script>
 
-<style scoped>
+
+<style>
     .tags {
         position: relative;
         height: 30px;
         overflow: hidden;
         background: #fff;
         padding-right: 120px;
+        box-shadow: 0 5px 10px #ddd;
     }
+
     .tags ul {
         box-sizing: border-box;
         width: 100%;
