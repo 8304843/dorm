@@ -47,3 +47,12 @@
         }
     }
 </script>
+<style scoped>
+.content {
+padding: 10px !important;
+}
+.content-box {
+left: 155px !important;
+top: 70px !important;
+}
+</style>

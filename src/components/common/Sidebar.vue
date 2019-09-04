@@ -41,12 +41,12 @@
                     {
                         icon: 'el-icon-lx-home',
                         index: 'dashboard',
-                        title: '系统首页'//记录统计
+                        title: '系统首页'//各种记录统计
                     },
                     {
-                        icon: 'el-icon-lx-cascades',
+                        icon: 'el-icon-lx-people',
                         index: 'table',
-                        title: '学生信息'
+                        title: '学生信息'//查看相关楼栋学生进出宿舍记录
                     },                                       
                     {
                         icon: 'el-icon-lx-calendar',
@@ -55,29 +55,19 @@
                         subs: [
                             {
                                 index: '3-1',
-                                title: '晚归记录'
+                                title: '晚归记录'//人性化处理,规定时间推迟几分钟开始计算
                             },
                             {
                                 index: '3-2',
-                                title: '不归记录',
-                                subs: [
-                                    {
-                                        index: 'editor',
-                                        title: '富文本编辑器'
-                                    },
-                                    {
-                                        index: 'markdown',
-                                        title: 'markdown编辑器'
-                                    },
-                                ]
+                                title: '不归记录',//需求不清楚,如何才算是不归???
                             },
                             {
                                 index: '3-3',
-                                title: '未出记录'
+                                title: '未出记录'//未出门时间超过24小时
                             },
                             {
                                 index: '3-4',
-                                title: '陌生人记录'//判断是否有预约
+                                title: '陌生人记录'//非本校人员皆为陌生人
                             },
                             // {
                             //     index: 'upload',
@@ -86,36 +76,36 @@
                         ]
                     },
                     {
-                        icon: 'el-icon-lx-cascades',
-                        index: 'table1',
-                        title: '请假申请'
-                    }, 
-                    {
-                        icon: 'el-icon-lx-copy',
+                        icon: 'el-icon-lx-notice',
                         index: 'tabs1',
-                        title: '紧急报警'
+                        title: '紧急报警'//针对陌生人,是否需要与陌生人记录合并???
                     },
                     {
+                        icon: 'el-icon-lx-text',
+                        index: 'editor',
+                        title: '请假申请'//上传假条照片(已请假)  或者编写电子假条  可打印或者推送给辅导员
+                    },  
+                    {
                         icon: 'el-icon-lx-copy',
-                        index: 'tabs',
-                        title: '违规申诉'
+                        index: 'markdown',
+                        title: '违规申诉'//出现紧急情况被记录,事后向辅导员说明,申请驳回异常记录
                     },
                     {
                         icon: 'el-icon-lx-warn',
                         index: '7',
                         title: '系统设置',
                         subs: [
-                            // {
-                            //     index: '404',
-                            //     title: '404页面'
-                            // },
+                            {
+                                index: 'permission',
+                                title: '账号管理'//只有超级管理员可查看
+                            },
                             // {
                             //     index: '404',
                             //     title: '404页面'
                             // }
                             {
                                 index: '404',
-                                title: '处警信息'//超级管理人可视
+                                title: '个人设置'//编辑个人信息
                             },
                         ]
                     }
@@ -150,7 +140,7 @@
         width: 0;
     }
     .sidebar-el-menu:not(.el-menu--collapse){
-        width: 250px;
+        width: 170px;
     }
     .sidebar > ul {
         height:100%;

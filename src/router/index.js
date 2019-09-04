@@ -19,15 +19,10 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
                     meta: { title: '系统首页' }
                 },
-                // {
-                //     path: '/icon',
-                //     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
-                //     meta: { title: '自定义图标' }
-                // },
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '基础表格' }
+                    meta: { title: '学生信息' }
                 },
                 {
                     path: '/tabs',
@@ -58,10 +53,10 @@ export default new Router({
                     meta: { title: '文件上传' }
                 },
                 {
-                    // 拖拽Dialog组件
-                    path: '/dialog',
-                    component: () => import(/* webpackChunkName: "dragdialog" */ '../components/page/DragDialog.vue'),
-                    meta: { title: '拖拽弹框' }
+                    // 权限页面
+                    path: '/permission',
+                    component: () => import(/* webpackChunkName: "permission" */ '../components/page/Permission.vue'),
+                    meta: { title: '权限测试', permission: true }
                 },
                 {
                     path: '/404',
