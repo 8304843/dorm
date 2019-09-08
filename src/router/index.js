@@ -25,19 +25,6 @@ export default new Router({
                     meta: { title: '学生信息' }
                 },
                 {
-                    path: '/late',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/late.vue'),
-                    meta: { title: '晚归记录' }
-                }, {
-                    path: '/noback',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/noback.vue'),
-                    meta: { title: '不归记录' }
-                }, {
-                    path: '/nogo',
-                    component: () => import(/* webpackChunkName: "table" */ '../components/page/nogo.vue'),
-                    meta: { title: '不出记录' }
-                },
-                {
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
                     meta: { title: 'tab选项卡' }
