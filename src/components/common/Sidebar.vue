@@ -54,15 +54,15 @@
                         title: '异常记录',//记录需推送
                         subs: [
                             {
-                                index: '3-1',
+                                index: 'late',
                                 title: '晚归记录'//人性化处理,规定时间推迟几分钟开始计算
                             },
                             {
-                                index: '3-2',
+                                index: 'noback',
                                 title: '不归记录',//需求不清楚,如何才算是不归???
                             },
                             {
-                                index: '3-3',
+                                index: 'nogo',
                                 title: '未出记录'//未出门时间超过24小时
                             },
                         ]
