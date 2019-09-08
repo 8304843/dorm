@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-row :gutter="16">
-      <!-- <el-col :span="16">
+      <el-col :span="16">
         <el-card shadow="hover">
           <tabs></tabs>
         </el-card>
-      </el-col> -->
-      <!-- <el-col :span="8">
+      </el-col>
+      <el-col :span="8">
         <el-card shadow="hover">
           <div class="schart-box">
             <!-- <div class="content-title">零部件不合格次数统计图</div> -->
-            <!-- <schart class="schart" canvasId="pie" :data="data2" type="pie" :options="options3"></schart>
+            <schart class="schart" canvasId="pie" :data="data2" type="pie" :options="options3"></schart>
           </div>
-        </el-card> -->
-      <!-- </el-col> -->
+        </el-card>
+      </el-col>
     </el-row>
     <el-row :gutter="24">
       <div class="container">
@@ -95,7 +95,7 @@ export default {
     // axios.post(`${this.baseURL}/dashboard.php`).then(res => {
     //   this.options = res.data.data
     // });
-    localStorage.getItem('ms_username')
+
     // axios.post(`${this.baseURL}/echarts.php`).then(response => {
     //   this.data2 = response.data;
     // });
