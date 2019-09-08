@@ -65,6 +65,14 @@
                                 index: 'nogo',
                                 title: '未出记录'//未出门时间超过24小时
                             },
+                            {
+                                index: '3-4',
+                                title: '陌生人记录'//非本校人员皆为陌生人
+                            },
+                            // {
+                            //     index: 'upload',
+                            //     title: '文件上传'
+                            // }
                         ]
                     },
                     {
@@ -75,7 +83,7 @@
                     {
                         icon: 'el-icon-lx-text',
                         index: 'editor',
-                        title: '请假登记'//上传假条照片(已请假)  或者编写电子假条  可打印或者推送给辅导员
+                        title: '请假申请'//上传假条照片(已请假)  或者编写电子假条  可打印或者推送给辅导员
                     },  
                     {
                         icon: 'el-icon-lx-copy',
@@ -91,9 +99,13 @@
                                 index: 'permission',
                                 title: '账号管理'//只有超级管理员可查看
                             },
+                            // {
+                            //     index: '404',
+                            //     title: '404页面'
+                            // }
                             {
-                                index: 'situation',
-                                title: '基本信息'//编辑个人信息
+                                index: '404',
+                                title: '个人设置'//编辑个人信息
                             },
                         ]
                     }
