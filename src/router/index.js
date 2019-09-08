@@ -16,8 +16,9 @@ export default new Router({
             children: [
                 {
                     path: '/dashboard',
+                    name:'dashboard',
                     component: () => import(/* webpackChunkName: "dashboard" */ '../components/page/Dashboard.vue'),
-                    meta: { title: '系统首页' }
+                    meta: { title: '系统首页',requireAuth:true }
                 },
                 {
                     path: '/table',
@@ -69,7 +70,12 @@ export default new Router({
                     // 权限页面
                     path: '/permission',
                     component: () => import(/* webpackChunkName: "permission" */ '../components/page/Permission.vue'),
-                    meta: { title: '权限测试', permission: true }
+                    meta: { title: '账号管理', permission: true }
+                },
+                {
+                    path: '/403',
+                    component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
+                    meta: { title: '403' }
                 },
                 {
                     path: '/404',
@@ -77,14 +83,15 @@ export default new Router({
                     meta: { title: '404' }
                 },
                 {
-                    path: '/403',
-                    component: () => import(/* webpackChunkName: "403" */ '../components/page/403.vue'),
-                    meta: { title: '403' }
+                    path: '/situation',
+                    component: () => import(/* webpackChunkName: "403" */ '../components/page/information/Situation.vue'),
+                    meta: { title: '基本信息' }
                 },
             ]
         },
         {
             path: '/login',
+            name:'login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue')
         },
         {
