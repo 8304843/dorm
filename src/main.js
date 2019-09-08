@@ -30,7 +30,8 @@ return originalPush.call(this, location).catch(err => err)
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title}`;
+    //https://blog.csdn.net/qq_32340877/article/details/79416344 仅供参考
+    document.title = `宿舍门禁系统`;
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');
@@ -47,6 +48,21 @@ router.beforeEach((to, from, next) => {
             next();
         }
     }
+    // const nextRoute = ['dashboard'] // 需要登录的页面
+    // let isLogin = localStorage.getItem('ms_username'); // 是否登录
+    // // 未登录状态；当路由到nextRoute指定页时，跳转至login
+    // if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+    //     console.log(to.meta.requireAuth)
+    //     if(isLogin==='null'&& to.path !== '/login'){ //判断本地是否登陆
+    //         console.log(to.meta.requireAuth)
+    //         next();
+    //     }else {
+    //         next('/login');
+    //     }
+    // }else {
+    //     next();
+    // }
+      
 });
 
 new Vue({
