@@ -88,8 +88,8 @@ export default {
         };
     },
     created() {
-        this.getData();
-        this.getaccount();
+        // this.getData();
+        // this.getaccount();
     },
     methods: {
         //获取账号
