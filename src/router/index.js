@@ -95,7 +95,7 @@ export default new Router({
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue')
         },
         {
-            path: '*',
+            path: '/123',
             redirect: '/404'
         }
     ]

@@ -89,7 +89,7 @@ export default {
     },
     created() {
         // this.getData();
-        // this.getaccount();
+        this.getaccount();
     },
     methods: {
         //获取账号
@@ -98,7 +98,7 @@ export default {
             //console.log(account);
             var fd  = new FormData()
             fd.append("account",account)
-           this.$axios.post(`http://localhost:8081/dormb/judge.php`,fd).then(res=>{
+           this.$axios.post(`http://localhost:8081/dormphp/src/judge.php`,fd).then(res=>{
             console.log(res);
             var level=res.data.data.level;
             console.log(level);
@@ -113,23 +113,23 @@ export default {
            
         },
         // 获取 easy-mock 的模拟数据
-        getData() {
-            fetchData(this.query).then(res => {
-                this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
-            });
-        },
+        // getData() {
+        //     fetchData(this.query).then(res => {
+        //         this.tableData = res.list;
+        //         this.pageTotal = res.pageTotal || 50;
+        //     });
+        // },
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
-            this.getData();
+            // this.getData();
         },
-        //推送操作
-        push(index, row) {
-                this.$message.success('推送成功');
-                this.tableData.splice(index, 1);
-              //  console.log(this.tableData);
-        },
+        // //推送操作
+        // push(index, row) {
+        //         this.$message.success('推送成功');
+        //         this.tableData.splice(index, 1);
+        //       //  console.log(this.tableData);
+        // },
         // 多选操作
         handleSelectionChange(val) {
             this.multipleSelection = val;

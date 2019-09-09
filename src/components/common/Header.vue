@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChage">
+        <div class="collapse-btn">
             <i class="el-icon-menu"></i>
         </div>
         <div class="logo">宿舍管理系统</div>

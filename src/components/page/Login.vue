@@ -21,7 +21,8 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
+                <el-link style="left:240px;" icon="el-icon-edit" target="_blank" @click="register()">注册</el-link>
             </el-form>
         </div>
     </div>
@@ -45,15 +46,25 @@ export default {
         submitForm() {
             this.$refs.login.validate(valid => {
                 if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
+                    if(this.param.username=='admin'){
+                        this.$message.success('登录成功');
+                        localStorage.setItem('ms_username', this.param.username);
+                        this.$router.push('/');
+                    }else{
+                        this.$message.success('登录成功');
+                        localStorage.setItem('ms_username', this.param.username);
+                        this.$router.push('/123');
+                    }               
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');
                     return false;
                 }
             });
+        },
+        register() {
+            localStorage.setItem('ms_username', this.param.username);
+            this.$router.push('/situation');
         },
     },
 };

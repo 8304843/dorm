@@ -180,19 +180,19 @@ export default {
         };
     },
     created() {
-        // this.getData();
+        this.getData();
     },
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-             axios.post(`/api/Mes_Show.php`).then((res)=> {
-          // console.log(res.data.data)
-          this.tableData = res.data.data
-          this.total = res.data.data.length-1;
-          this.loading = false;  
-          const data = res.data.data;
-          this.allTableData = data;
-          // this.setPaginations()
+            axios.post(`/api/Mes_Show.php`).then((res)=> {
+            // console.log(res.data.data)
+            this.tableData = res.data.data
+            this.total = res.data.data.length-1;
+            this.loading = false;  
+            const data = res.data.data;
+            this.allTableData = data;
+            // this.setPaginations()
         }) 
             // fetchData(this.query).then(res => {
             //     this.tableData = res.list;
