@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+// import { fetchData } from '../../api/index';
 import axios from "axios";
 export default {
     name: 'basetable',
@@ -181,11 +181,20 @@ export default {
     },
     created() {
         this.getData();
+        var fd  = new Array()
+        var fd = 
+          {
+            id:'1', //人员编号 
+          }
+        
+        axios.post(`/api/cw-afaps/extService/faceGroup/get`,fd).then(res =>{
+          console.log(res) 
+        })
     },
     methods: {
         // 获取 easy-mock 的模拟数据
         getData() {
-            axios.post(`/api/Mes_Show.php`).then((res)=> {
+            axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`).then((res)=> {
             // console.log(res.data.data)
             this.tableData = res.data.data
             this.total = res.data.data.length-1;

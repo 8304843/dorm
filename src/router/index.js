@@ -23,42 +23,42 @@ export default new Router({
                 {
                     path: '/table',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/BaseTable.vue'),
-                    meta: { title: '学生信息' }
+                    meta: { title: '学生信息' ,requireAuth: true}
                 },
                 {
                     path: '/late',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/late.vue'),
-                    meta: { title: '晚归记录' }
+                    meta: { title: '晚归记录' ,requireAuth:true}
                 }, {
                     path: '/noback',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/noback.vue'),
-                    meta: { title: '不归记录' }
+                    meta: { title: '不归记录' ,requireAuth:true}
                 }, {
                     path: '/nogo',
                     component: () => import(/* webpackChunkName: "table" */ '../components/page/nogo.vue'),
-                    meta: { title: '不出记录' }
+                    meta: { title: '不出记录' ,requireAuth:true}
                 },
                 {
                     path: '/tabs',
                     component: () => import(/* webpackChunkName: "tabs" */ '../components/page/Tabs.vue'),
-                    meta: { title: 'tab选项卡' }
+                    meta: { title: 'tab选项卡' ,requireAuth:true }
                 },
                 {
                     path: '/form',
                     component: () => import(/* webpackChunkName: "form" */ '../components/page/BaseForm.vue'),
-                    meta: { title: '基本表单' }
+                    meta: { title: '基本表单' ,requireAuth:true}
                 },
                 {
                     // 富文本编辑器组件
                     path: '/editor',
                     component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: { title: '富文本编辑器' }
+                    meta: { title: '富文本编辑器' ,requireAuth:true}
                 },
                 {
                     // markdown组件
                     path: '/markdown',
                     component: () => import(/* webpackChunkName: "markdown" */ '../components/page/Markdown.vue'),
-                    meta: { title: 'markdown编辑器' }
+                    meta: { title: 'markdown编辑器' ,requireAuth:true}
                 },
                 {
                     // 图片上传组件
@@ -81,6 +81,11 @@ export default new Router({
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
                     meta: { title: '404' }
+                },
+                {
+                    path: '/405',
+                    component: () => import(/* webpackChunkName: "403" */ '../components/page/405.vue'),
+                    meta: { title: '405' }
                 },
                 {
                     path: '/situation',

@@ -22,7 +22,7 @@
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
                 <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
-                <el-link style="left:240px;" icon="el-icon-edit" target="_blank" @click="register()">注册</el-link>
+                <!-- <el-link style="left:240px;" icon="el-icon-edit" target="_blank" @click="register()">注册</el-link> -->
             </el-form>
         </div>
     </div>
@@ -45,15 +45,15 @@ export default {
     methods: {
         submitForm() {
             this.$refs.login.validate(valid => {
-                if (valid) {
-                    if(this.param.username=='admin'){
+                if (valid) {//判断是否注册过，有就跳到首页，没有就跳到基本信息
+                    if(this.param.username=='admin'){//注册状态
                         this.$message.success('登录成功');
                         localStorage.setItem('ms_username', this.param.username);
                         this.$router.push('/');
                     }else{
-                        this.$message.success('登录成功');
-                        localStorage.setItem('ms_username', this.param.username);
-                        this.$router.push('/123');
+                        this.$message.success('登录成功，请先注册个人信息');
+                        localStorage.setItem('state', '未注册');
+                        this.$router.push('/situation');
                     }               
                 } else {
                     this.$message.error('请输入账号和密码');
@@ -62,10 +62,10 @@ export default {
                 }
             });
         },
-        register() {
-            localStorage.setItem('ms_username', this.param.username);
-            this.$router.push('/situation');
-        },
+        // register() {
+        //     localStorage.setItem('ms_username', this.param.username);
+        //     this.$router.push('/situation');
+        // },
     },
 };
 </script>
