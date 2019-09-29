@@ -1,6 +1,6 @@
 @@ -0,0 +1,219 @@
 <template>
-  <div class="container" style="height:90%;">
+  <div class="container">
         <div id="app">
              <el-upload
                 class="avatar-uploader"
@@ -15,7 +15,7 @@
                 <el-col :span="18">
                     <el-divider content-position="left">基本信息</el-divider>
                 </el-col>
-                <el-button type="primary" style="margin:1px;width:100px;height:45px;font-size:15px;">保存</el-button>
+                <el-button type="primary" style="margin:1px;width:100px;height:45px;font-size:15px;" @click="save" >保存</el-button>
             </el-row>
             <el-form ref="form" :model="form" :rules="rules" label-width="90px" style="margin-left:160px;">
                 <br/>
@@ -46,7 +46,7 @@
                 <el-row style="margin:15px;">
                     <el-col :span="6">
                         <el-form-item label="学号：">
-                            <el-input v-model="form.name2"></el-input>
+                            <el-input v-model="form.number"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -62,7 +62,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="宿舍号：" style="margin-left:20px;">
+                        <el-form-item label="宿舍号：" prop="drom" style="margin-left:20px;">
                             <el-input v-model="form.name3"></el-input>
                         </el-form-item>
                     </el-col>
@@ -84,7 +84,7 @@
                 <el-col :span="18">
                     <el-divider content-position="left">家庭信息</el-divider>
                 </el-col>
-                <el-button type="primary" style="margin:1px;width:100px;height:45px;font-size:15px;">保存</el-button>
+                <el-button type="primary" style="margin:1px;width:100px;height:45px;font-size:15px;" >保存</el-button>
             </el-row>
             <el-form ref="form" :model="form" label-width="90px" style="margin-left:160px;">
                 <br/>
@@ -100,7 +100,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="联系电话："style="margin-left:30px;">
+                        <el-form-item label="联系电话：" style="margin-left:30px;">
                             <el-input v-model="form.name2"></el-input>
                         </el-form-item>
                     </el-col>
@@ -117,7 +117,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="联系电话："style="margin-left:30px;">
+                        <el-form-item label="联系电话：" style="margin-left:30px;">
                             <el-input v-model="form.name2"></el-input>
                         </el-form-item>
                     </el-col>
@@ -136,7 +136,8 @@
           useranme: 'admin',
           nickname: '',
           name: '',
-          email: ''
+          email: '',
+          number:''
         },
          imageUrl: '',
         rules: {
@@ -144,7 +145,8 @@
           email: [
             {required: true, message: '请输入邮箱', trigger: 'blur'},
             {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change'}
-          ]
+          ],
+          drom:[{required:true,message:"用户名不能为空",trigger:"blur"}],
         },
       }
     },
@@ -176,6 +178,15 @@
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return isJPG && isLt2M;
+      },
+      save(){
+        localStorage.setItem('state', '注册');
+        var fd  = new FormData()
+        fd.append("username",this.form.number)
+        fd.append("state",1)     
+        this.$axios.post(`http://localhost:8081/dormphp/src/UpState.php`,fd).then(res =>{
+          console.log(res) 
+        })
       }
     },
     mounted() {
@@ -187,7 +198,9 @@
         this.form.email = user.email || '';
         this.form.name = user.name || '';
       }
+      this.form.number=localStorage.getItem('ms_username');
     }
+    
   }
 </script>
 

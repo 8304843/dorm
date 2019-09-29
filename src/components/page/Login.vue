@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { fetchData } from '../../api/index';
 export default {
     data: function() {
         return {
@@ -45,16 +46,23 @@ export default {
     methods: {
         submitForm() {
             this.$refs.login.validate(valid => {
-                if (valid) {//判断是否注册过，有就跳到首页，没有就跳到基本信息
-                    if(this.param.username=='admin'){//注册状态
-                        this.$message.success('登录成功');
-                        localStorage.setItem('ms_username', this.param.username);
-                        this.$router.push('/');
-                    }else{
-                        this.$message.success('登录成功，请先注册个人信息');
-                        localStorage.setItem('state', '未注册');
-                        this.$router.push('/situation');
-                    }               
+                if (valid) {//判断是否注册过，有就跳到首页，没有就跳到基本信息 
+                    var fd  = new FormData()
+                    fd.append("username",this.param.username)
+                    this.$axios.post(`http://localhost:8081/dormphp/src/state.php`,fd).then(res=>{
+                        var state=res.data.data.state;
+                         localStorage.setItem('ms_username', this.param.username);
+                        if(state==0)
+                        {
+                            this.$message.success('登录成功,请先注册个人信息');
+                             localStorage.setItem('state', '未注册');
+                             this.$router.push('/situation');
+                        }else{
+                            this.$message.success('登录成功');
+                            localStorage.setItem('ms_username', this.param.username);
+                            this.$router.push('/');
+                        }
+                    })       
                 } else {
                     this.$message.error('请输入账号和密码');
                     console.log('error submit!!');

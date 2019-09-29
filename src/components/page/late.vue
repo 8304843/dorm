@@ -31,12 +31,12 @@
                 @selection-change="handleSelectionChange"
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
                 <el-table-column prop="name" label="用户名"></el-table-column>
                 <el-table-column prop="class" label="班级"></el-table-column>
                 <el-table-column prop="dorm" label="宿舍"></el-table-column>
-                <el-table-column prop="godate" label="出宿舍时间"></el-table-column>
-                <el-table-column prop="backdate" label="回宿舍时间"></el-table-column>
+                <el-table-column prop="gotime" label="出宿舍时间"></el-table-column>
+                <el-table-column prop="backtime" label="回宿舍时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope" >
                         <el-button type="text" disabled v-if="flag==false">推送</el-button>
@@ -57,9 +57,6 @@
                     @current-change="handlePageChange"
                 ></el-pagination>
             </div>
-           <el-button
-                            @click=" getaccount()"
-                        >测试</el-button>
         </div>
     </div>
 </template>
@@ -84,41 +81,47 @@ export default {
             form: {},
             idx: -1,
             id: -1,
-            flag:false
+            flag:false,
+    //         formDate:{
+    //             name:'',//姓名
+    //             class:'',//班级
+    //             dorm:'',//宿舍号
+    //             gotime:'',//出宿舍时间
+    //             backtime:'',//回宿舍时间
+    //   },
         };
     },
     created() {
-        // this.getData();
+        this.getData();
         this.getaccount();
     },
     methods: {
         //获取账号
         getaccount(){
             var account=localStorage.getItem('ms_username');
-            //console.log(account);
             var fd  = new FormData()
             fd.append("account",account)
-           this.$axios.post(`http://localhost:8081/dormphp/src/judge.php`,fd).then(res=>{
-            console.log(res);
+           this.$axios.post(`/api/judge.php`,fd).then(res=>{
             var level=res.data.data.level;
-            console.log(level);
             if(level==1||level==2)
             {
                 this.flag=true;
             }   
-            console.log(this.flag)
           })
-
-           
-           
         },
-        // 获取 easy-mock 的模拟数据
-        // getData() {
-        //     fetchData(this.query).then(res => {
-        //         this.tableData = res.list;
-        //         this.pageTotal = res.pageTotal || 50;
-        //     });
-        // },
+
+        getData() {
+            this.$axios.post(`/api/LateShow.php`).then((res)=> {
+            this.tableData = res.data.data
+            this.total = res.data.data.length-1;
+            this.loading = false;  
+            const data = res.data.data;
+            this.allTableData = data;
+            })
+        },
+
+
+
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
