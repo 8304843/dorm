@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 Vue.use(Router);
-
 export default new Router({
     routes: [
         {
@@ -51,8 +50,8 @@ export default new Router({
                 {
                     // 富文本编辑器组件
                     path: '/editor',
-                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/VueEditor.vue'),
-                    meta: { title: '富文本编辑器' ,requireAuth:true}
+                    component: () => import(/* webpackChunkName: "editor" */ '../components/page/Application.vue'),
+                    meta: { title: '请假申请' ,requireAuth:true}
                 },
                 {
                     // markdown组件
@@ -98,6 +97,11 @@ export default new Router({
             path: '/login',
             name:'login',
             component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue')
+        },
+        {
+            path: '/node',
+            component: () => import(/* webpackChunkName: "tabs" */ '../components/page/information/Node.vue'),
+            meta: { title: 'tab选项卡' ,requireAuth:true }
         },
         {
             path: '/123',

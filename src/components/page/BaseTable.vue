@@ -187,9 +187,9 @@ export default {
             id:'1', //人员编号 
           }
         
-        axios.post(`/api/cw-afaps/extService/faceGroup/get`,fd).then(res =>{
-          console.log(res) 
-        })
+        // axios.post(`/api/cw-afaps/extService/faceGroup/get`,fd).then(res =>{
+        //   console.log(res) 
+        // })
     },
     methods: {
         // 获取 easy-mock 的模拟数据

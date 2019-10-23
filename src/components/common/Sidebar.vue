@@ -64,15 +64,7 @@
                             {
                                 index: 'nogo',
                                 title: '未出记录'//未出门时间超过24小时
-                            },
-                            // {
-                            //     index: '3-4',
-                            //     title: '陌生人记录'//非本校人员皆为陌生人
-                            // },
-                            // {
-                            //     index: 'upload',
-                            //     title: '文件上传'
-                            // }
+                            },                          
                         ]
                     },
                     {
@@ -99,10 +91,6 @@
                                 index: 'permission',
                                 title: '账号管理'//只有超级管理员可查看
                             },
-                            // {
-                            //     index: '404',
-                            //     title: '404页面'
-                            // }
                             {
                                 index: 'situation',
                                 title: '基本信息'//编辑个人信息
