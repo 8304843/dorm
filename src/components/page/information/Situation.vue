@@ -7,7 +7,8 @@
                 action="https://jsonplaceholder.typicode.com/posts/"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
+                :before-upload="beforeAvatarUpload"
+				        style="height: 0px;">
                 <img v-if="imageUrl" :src="imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload>
@@ -208,9 +209,9 @@
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9 ! important;
     border-radius: 6px ! important;
-    top: 200px ! important;
+    top: 140px ! important;
     cursor: pointer ! important;
-    position: absolute ! important;
+    position: relative ! important;
     overflow: hidden ! important;
     width: 180px ! important;
   }
@@ -229,5 +230,8 @@
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .container{
+	height: 100%;  
   }
 </style>

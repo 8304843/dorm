@@ -1,4 +1,4 @@
-<template>
+<template height="100px">
     <div class="">
         <div class="crumbs">
             <el-breadcrumb separator="/">
@@ -77,7 +77,8 @@
             return {
                 message: 'first',
                 showHeader: false,
-                unread: [{
+                unread: [
+				{
                     date: '2018-04-19 20:00:00',
                     title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护',
                 },{

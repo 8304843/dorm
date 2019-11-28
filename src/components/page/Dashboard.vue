@@ -1,23 +1,19 @@
 <template>
   <div>
-    <el-row :gutter="16">
-      <el-col :span="16">
-        <el-card shadow="hover">
-          <tabs></tabs>
+    <el-row :gutter="2">
+      <el-col :span="16" style="width: 66.5%;height: 440px;float: left;">
+        <el-card shadow="hover" style="height: 440px;">
+          <tabs></tabs><!-- tabs选项卡组件 -->
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card shadow="hover">
-          <div class="schart-box">
-            <!-- <div class="content-title">零部件不合格次数统计图</div> -->
-            <schart class="schart" canvasId="pie" :data="data2" type="pie" :options="options3"></schart>
-          </div>
+      <el-col :span="8" style="width: 33.5%;height: 440px;float: right;">
+        <el-card shadow="hover" >
+          <schart style="width: 100%;height: 420px; float: left;" canvasId="pie" :data="data2" type="pie" :options="options3"></schart><!-- 组件 -->
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="24">
-      <div class="container">
-        <div class="schart-box">
+    <el-row :gutter="2" style="margin: 0;padding: 0;">
+        <div  style="background-color: #FFFFFF;width: 33.33%;height: 450px; float: left;">
           <el-select v-model="value" placeholder="请选择" @change="seld()">
             <el-option
               v-for="item in options"
@@ -26,15 +22,14 @@
               :label="item.lable">
             </el-option>
           </el-select>
-          <schart class="schart" canvasId="bar" :data="data3" type="pie" :options="options1"></schart>
+          <schart class="schart" style="width: 100%; float: left;" canvasId="bar" :data="data3" type="pie" :options="options1"></schart>
         </div>
-        <div class="schart-box">
-          <schart class="schart" canvasId="line" :data="data1" type="line" :options="options2"></schart>
+        <div  style="width: 33%;height: 450px; float: left;">
+          <schart class="schart" style="width: 100%;height: 450px; float: left;" canvasId="line" :data="data1" type="line" :options="options2"></schart>
         </div>
-        <div class="schart-box">
-          <schart class="schart" canvasId="ring" :data="data2" type="ring" :options="options4"></schart>
+        <div  style="width: 33.33%;height: 450px; float: right;margin-left: 1px;">
+          <schart class="schart" style="width: 100%;height: 450px; float: right;" canvasId="ring" :data="data2" type="ring" :options="options4"></schart>
         </div>
-      </div>
     </el-row>
   </div>
 </template>
@@ -53,37 +48,37 @@ export default {
        options: [],
         value: '',
       data1: [
-        { name: "电流安全上限", value: 220 },
-        { name: "电流实际最大值", value: 200 },
-        { name: "电流实际最小值", value: 120 },
-        { name: "电流安全下限", value: 100 }
+        { name: "1月", value: 220 },
+        { name: "2月", value: 200 },
+        { name: "3与", value: 120 },
+        { name: "4月", value: 100 }
       ],
       options1: {
-        title: "项目零件完成情况",
+        title: "学生晚归记录统计",
         bgColor: "#FFFFFF",
         titleColor: "#000000",
         legendColor: "#000000",
         radius: 120
       },
       options2: {
-        title: "关键零部件电流品控参数",
+        title: "学生不归记录统计",
         bgColor: "#D5E4EB",
         titleColor: "#00887C",
         fillColor: "red",
         contentColor: "rgba(46,199,201,0.3)"
       },
       options4: {
-        title: "关键零部件年度退产统计",
+        title: "违规统计",
         bgColor: "#829daa",
         titleColor: "#ffffff",
         legendColor: "#ffffff",
         radius: 120,
         innerRadius: 80
       },
-      data2: [{ name: "-", value: 1 }],
+      data2: [{ name: "-", value: 2 }],
       data3: [{ name: "-", value: 1 }],
       options3: {
-        title: "零部件不合格次数比例",
+        title: "学生未出记录统计",
         bgColor: "#FFFFFF",
         titleColor: "#000000",
         legendColor: "#000000",
@@ -120,6 +115,10 @@ export default {
 /* .el-row {
         margin-bottom: 20px;
     } */
+.elcol_first {
+	height: 450px;
+	background-color: #0000FF;
+}
 .grid-content {
   display: flex;
   align-items: center;
@@ -220,12 +219,11 @@ export default {
   color: #999;
 }
 .schart-box {
-  display: inline-block;
-  margin: 20px;
+  margin: 1px;
 }
 .schart {
-  width: 500px;
-  height: 400px;
+  /* width: 500px; */
+  height: 420px;
 }
 .content-title {
   clear: both;
