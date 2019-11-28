@@ -34,6 +34,7 @@ router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title}`;
     // console.log(to.meta.permission)
     let state = localStorage.getItem('state');
+    //console.log(state)
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');
