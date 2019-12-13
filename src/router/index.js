@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',
@@ -96,7 +97,8 @@ export default new Router({
         {
             path: '/login',
             name:'login',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue')
+            component: () => import(/* webpackChunkName: "login" */ '../components/page/Login.vue'),
+            meta: { title: '宿舍管理系统' }
         },
         {
             path: '/node',
