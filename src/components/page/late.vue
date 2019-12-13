@@ -94,6 +94,15 @@ export default {
     created() {
         this.getData();
         this.getaccount();
+        var fd  = new Array()
+        var fd = 
+          {
+            id:'c11aa5249fb64ba5bfc10f93e123320a', //人员编号 
+          }
+         this.$axios.post(`http://192.168.0.167:8280/cw-afaps/extService/warningRecord/select`,fd).then(res =>{
+         console.log(res) 
+        })
+      
     },
     methods: {
         //获取账号
@@ -101,7 +110,7 @@ export default {
             var account=localStorage.getItem('ms_username');
             var fd  = new FormData()
             fd.append("account",account)
-           this.$axios.post(`/api/judge.php`,fd).then(res=>{
+           this.$axios.post(`http://localhost:8081/dormphp/src/judge.php`,fd).then(res=>{
             var level=res.data.data.level;
             if(level==1||level==2)
             {
@@ -111,7 +120,7 @@ export default {
         },
 
         getData() {
-            this.$axios.post(`/api/LateShow.php`).then((res)=> {
+            this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`).then((res)=> {
             this.tableData = res.data.data
             this.total = res.data.data.length-1;
             this.loading = false;  
