@@ -101,7 +101,7 @@ export default {
             var account=localStorage.getItem('ms_username');
             var fd  = new FormData()
             fd.append("account",account)
-           this.$axios.post(`/api/judge.php`,fd).then(res=>{
+           this.$axios.post(`http://192.168.0.178:8081/dormphp/src/judge.php`,fd).then(res=>{
             var level=res.data.data.level;
             if(level==1||level==2)
             {
@@ -111,7 +111,7 @@ export default {
         },
 
         getData() {
-            this.$axios.post(`/api/NoGo.php`).then((res)=> {
+            this.$axios.post(`http://192.168.0.178:8081/dormphp/src/NoGo.php`).then((res)=> {
             this.tableData = res.data.data
             this.total = res.data.data.length-1;
             this.loading = false;  

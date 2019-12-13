@@ -35,7 +35,7 @@
                 <el-table-column prop="name" label="用户名"></el-table-column>
                 <el-table-column prop="class" label="班级"></el-table-column>
                 <el-table-column prop="dorm" label="宿舍"></el-table-column>
-                <el-table-column prop="gotime" label="出宿舍时间"></el-table-column>
+                <el-table-column prop="time" label="出宿舍时间"></el-table-column>
                 <el-table-column prop="backtime" label="回宿舍时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope" >
@@ -101,7 +101,7 @@ export default {
             var account=localStorage.getItem('ms_username');
             var fd  = new FormData()
             fd.append("account",account)
-           this.$axios.post(`/api/judge.php`,fd).then(res=>{
+           this.$axios.post(`http://192.168.0.178:8081/dormphp/src/judge.php`,fd).then(res=>{
             var level=res.data.data.level;
             if(level==1||level==2)
             {
@@ -111,7 +111,7 @@ export default {
         },
 
         getData() {
-            this.$axios.post(`/api/NoBack.php`).then((res)=> {
+            this.$axios.post(`http://192.168.0.178:8081/dormphp/src/NoBack.php`).then((res)=> {
             this.tableData = res.data.data
             this.total = res.data.data.length-1;
             this.loading = false;  

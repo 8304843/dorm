@@ -33,6 +33,7 @@ import { fetchData } from '../../api/index';
 export default {
     data: function() {
         return {
+            userId:'',//用户编码
             param: {
                 username: '',
                 password: '',
@@ -42,6 +43,12 @@ export default {
                 password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
             },
         };
+    },
+    created() {
+        this.$axios.post(`http://localhost:8081/yuyanphp/user/userId.php`).then(res=>{
+            this.userId=res.data.data[0].id
+            localStorage.setItem('userId',this.userId)
+        })
     },
     methods: {
         submitForm() {
@@ -70,10 +77,6 @@ export default {
                 }
             });
         },
-        // register() {
-        //     localStorage.setItem('ms_username', this.param.username);
-        //     this.$router.push('/situation');
-        // },
     },
 };
 </script>

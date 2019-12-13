@@ -8,7 +8,7 @@
       </el-col>
       <el-col :span="8" style="width: 33.5%;height: 440px;float: right;">
         <el-card shadow="hover" >
-          <schart style="width: 100%;height: 420px; float: left;" canvasId="pie" :data="data2" type="pie" :options="options3"></schart><!-- 组件 -->
+          <schart style="height: 420px;margin:0 auto;" canvasId="pie" :data="data2" type="pie" :options="options3"></schart><!-- 组件 -->
         </el-card>
       </el-col>
     </el-row>
@@ -95,6 +95,7 @@ export default {
     //   this.data2 = response.data;
     // });
   },
+  
   methods: {
    seld(){
      var fd = new FormData()
