@@ -12,6 +12,8 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 
+import websocket from '../src/websocketStore'
+Vue.prototype.$websocket = websocket;
 Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;

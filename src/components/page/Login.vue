@@ -56,7 +56,7 @@ export default {
                 if (valid) {//判断是否注册过，有就跳到首页，没有就跳到基本信息 
                     var fd  = new FormData()
                     fd.append("username",this.param.username)
-                    this.$axios.post(`http://localhost:8081/dormphp/src/state.php`,fd).then(res=>{
+                    this.$axios.post(`http://localhost:8081/dormphp/src/Rge_state.php`,fd).then(res=>{
                         var state=res.data.data.state;
                          localStorage.setItem('ms_username', this.param.username);
                         if(state==0)

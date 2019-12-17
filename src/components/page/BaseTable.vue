@@ -23,12 +23,12 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
-                <el-table-column prop="name" label="姓名" align="center" width="80%"></el-table-column>
-                <el-table-column prop="xuehao" label="学号" align="center"></el-table-column>
+                <el-table-column prop="username" label="姓名" align="center" width="80%"></el-table-column>
+                <el-table-column prop="number" label="学号" align="center"></el-table-column>
                 <el-table-column prop="college" label="二级学院" align="center"></el-table-column>
-                <el-table-column prop="classmate" label="班级" align="center"></el-table-column>
-                <el-table-column prop="dorm" label="宿舍号" align="center"></el-table-column>
-                <el-table-column prop="date" label="录入时间" align="center"></el-table-column>
+                <el-table-column prop="class" label="班级" align="center"></el-table-column>
+                <el-table-column prop="dorm_num" label="宿舍号" align="center"></el-table-column>
+                <el-table-column prop="rge_time" label="录入时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-star-off" @click="handlecheck(scope.$index, scope.row)"
@@ -70,6 +70,8 @@ export default {
             dialogEdit: {
               show: false
             },
+            flag:'',
+            websock: null,
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -86,33 +88,15 @@ export default {
         };
     },
     created() {
-        this.getData();
-        // var fd  = new Array()
-        // var fd = 
-        //   {
-        //     id:'1', //人员编号 
-        //   }
-        // axios.post(`/api/cw-afaps/extService/faceGroup/get`,fd).then(res =>{
-        //   console.log(res) 
-        // })
+        this.initWebSocket();
+    },
+    destroyed() {
+        this.websock.close() //离开路由之后断开websocket连接
     },
     methods: {
-        // 获取 easy-mock 的模拟数据
-        getData() {
-          console.log("121")
-            axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`).then((res)=> {
-            // console.log(res.data.data.length)
-            this.tableData = res.data.data
-            this.pageTotal = res.data.data.length;
-            this.loading = false;  
-            const data = res.data.data;
-            this.allTableData = data;
-            }) 
-        },
         // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
-            this.getData();
         },
         // 多选操作
         handleSelectionChange(val) {
@@ -142,16 +126,45 @@ export default {
         },
          // 初始页currentPage、初始每页数据数pagesize和数据data
         handleSizeChange: function (size) {
-                this.pagesize = size;
-                console.log(this.pagesize)  //每页下拉显示数据
+            this.pagesize = size;
         },
         handleCurrentChange: function(currentPage){
-                this.currentPage = currentPage;
-                console.log(this.currentPage)  //点击第几页
+            this.currentPage = currentPage;
+        },
+        initWebSocket(){ //初始化weosocket
+            const wsuri = "ws://127.0.0.1:3000/";
+            this.websock = new WebSocket(wsuri);
+            this.websock.onmessage = this.websocketonmessage;
+            this.websock.onopen = this.websocketonopen;
+            this.websock.onerror = this.websocketonerror;
+            this.websock.onclose = this.websocketclose;
+        },
+        websocketonopen(){ //连接建立之后执行send方法发送数据
+            let actions = {"send":"1"};
+            console.log('连接成功！');
+            this.websocketsend(JSON.stringify(actions));
+        },
+        websocketonerror(){//连接建立失败重连
+            this.initWebSocket();
+        },
+        websocketonmessage(e){ //数据接收
+            var fd  = new FormData()
+            fd.append("flag",this.flag)
+            this.$axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`,fd).then(res =>{
+                this.tableData = res.data.data
+                let actions = {"rec":this.tableData};
+                this.websocketsend(JSON.stringify(actions));
+            })
+        },
+        websocketsend(Data){//数据发送
+            this.websock.send(Data);
+        },
+        websocketclose(e){  //关闭
+            console.log('断开连接',e);
         },    
     },
     components: {
-      EditUser,
+        EditUser,
     },
 };
 </script>

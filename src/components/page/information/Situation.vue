@@ -22,8 +22,8 @@
                 <br/>
                 <el-row class="row">
                     <el-col :span="5">
-                        <el-form-item  label="姓名" prop="nickname">
-                            <el-input v-model="form.nickname" placeholder="name"></el-input>
+                        <el-form-item  label="姓名" prop="username">
+                            <el-input v-model="form.username" placeholder="name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
@@ -52,7 +52,7 @@
                     </el-col>
                     <el-col :span="5">
                         <el-form-item label="身份证" >
-                            <el-input v-model="form.name3" placeholder="cardId"></el-input>
+                            <el-input v-model="form.cardId" placeholder="cardId"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -75,8 +75,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
-                        <el-form-item label="当前状态">
-                            <el-input v-model="form.name3" placeholder="注册状态"></el-input>
+                        <el-form-item label="邮箱">
+                            <el-input v-model="form.name3" placeholder="邮箱"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -136,14 +136,14 @@
         id:'',
         form: {
           useranme: 'admin',
-          nickname: '',
+          username: '',
           name: '',
           email: '',
           number:''
         },
         imageUrl: '',
         rules: {
-          nickname:[{required:true,message:"用户名不能为空",trigger:"blur"}],
+          username:[{required:true,message:"用户名不能为空",trigger:"blur"}],
           email: [
             {required: true, message: '请输入邮箱', trigger: 'blur'},
             {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change'}
@@ -159,9 +159,10 @@
     },
     mounted() {
       this.form.number=localStorage.getItem('ms_username');
-      console.log(this.form.number)
     },
     methods: {
+      //个人信息
+      
       //添加人脸接口
       addfaceApi(facegroupId){
         var imageData = localStorage.getItem('photo_base64')
@@ -169,8 +170,8 @@
         var fd  = new Array()
         var fd = 
           {
-            name:"小号1111",
-            carId:"441323",
+            name:this.form.username,
+            carId:this.form.cardId,
             natives:"广东",
             groupId:facegroupId,
             imageData:imageData,
@@ -179,7 +180,7 @@
             remark:""
           }
         this.$axios.post(`/api/cw-afaps/extService/face/add`,fd).then(res =>{
-          console.log(res) 
+          this.$message.success('保存成功！')
         })  
       },
       //查询人脸库接口
@@ -214,7 +215,6 @@
         }
         //校验成功上传文件
         if(isJPG && isLt2M == true){
-          console.log(file);
           // post上传图片
           new Promise(function (resolve, reject) {
             var reader = new FileReader();
@@ -222,7 +222,6 @@
             reader.onload = (e) => {
               // 读取到的图片base64 数据编码 将此编码字符串传给后台即可
               var imgcode = e.target.result;
-              console.log(imgcode)
               localStorage.setItem('photo_base64',imgcode)
             }
           })  
@@ -234,17 +233,25 @@
         return isJPG && isLt2M;
       },
       savebaseinfo(form_base){
-      // this.addfaceApi()
       this.checkfacegroupId()
       this.$refs[form_base].validate(valid => {
           if (valid) {
-            // localStorage.setItem('state', '注册');
-            // var fd  = new FormData()
-            // fd.append("username",this.form.number)
-            // fd.append("state",1)     
-            // this.$axios.post(`http://localhost:8081/dormphp/src/UpState.php`,fd).then(res =>{
-            //   console.log(res) 
-            // })
+            localStorage.setItem('state', '注册');
+            var fd  = new FormData()
+            fd.append("username",this.form.username)
+            fd.append("number",this.form.number)
+            fd.append("class",this.form.class)
+            fd.append("college",this.form.college)
+            fd.append("phone",this.form.phone)
+            fd.append("carId",this.form.carId)
+            fd.append("dorm_floor",this.form.dorm_floor)
+            fd.append("dorm_num",this.form.dorm_num)
+            fd.append("sex",this.form.sex)
+            fd.append("email",this.form.email)
+            fd.append("state",1)     
+            this.$axios.post(`http://localhost:8081/dormphp/src/UpState.php`,fd).then(res =>{
+              console.log(res) 
+            })
           }
         });
       }, 
