@@ -15,10 +15,15 @@
                     class="handle-del mr10"
                     @click="delAllSelection"
                 >批量推送</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
+                <el-time-select
+                    v-model="value"
+                    :picker-options="{
+                        start: '23:30',
+                        step: '00:05',
+                        end: '24:00'
+                    }"
+                    placeholder="默认23：00">
+                </el-time-select>
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
@@ -34,8 +39,8 @@
                 <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
                 <el-table-column prop="name" label="用户名"></el-table-column>
                 <el-table-column prop="class" label="班级"></el-table-column>
+                <el-table-column prop="dormfloor" label="栋号"></el-table-column>
                 <el-table-column prop="dorm" label="宿舍"></el-table-column>
-                <el-table-column prop="gotime" label="出宿舍时间"></el-table-column>
                 <el-table-column prop="backtime" label="回宿舍时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope" >
@@ -47,15 +52,16 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
+             <div class="pagination">
                 <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
-                    :total="pageTotal"
-                    @current-change="handlePageChange"
-                ></el-pagination>
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[5, 10, 20, 40]" 
+                    :page-size="pagesize"        
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="tableData.length">    
+                </el-pagination>
             </div>
         </div>
     </div>
@@ -63,10 +69,13 @@
 
 <script>
 import { fetchData } from '../../api/index';
+import axios from "axios";
 export default {
     name: 'basetable',
     data() {
         return {
+            currentPage:1, //初始页
+            pagesize:10,    //    每页的数据
             query: {
                 address: '',
                 name: '',
@@ -82,29 +91,41 @@ export default {
             idx: -1,
             id: -1,
             flag:false,
-    //         formDate:{
-    //             name:'',//姓名
-    //             class:'',//班级
-    //             dorm:'',//宿舍号
-    //             gotime:'',//出宿舍时间
-    //             backtime:'',//回宿舍时间
-    //   },
+            value: '23:30',
+            value2:'23:30：00',
+            lastTime:'05:30:00'
         };
     },
+    watch:{
+        value(val, newval) {
+        this.value2=val+':00';
+        this.selectTime();
+    }
+    },
     created() {
-        this.getData();
+        this.initWebSocket();
         this.getaccount();
-        var fd  = new Array()
-        var fd = 
-          {
-            id:'c11aa5249fb64ba5bfc10f93e123320a', //人员编号 
-          }
-         this.$axios.post(`http://192.168.0.167:8280/cw-afaps/extService/warningRecord/select`,fd).then(res =>{
-         console.log(res) 
-        })
-      
     },
     methods: {
+        //选择时间
+        selectTime(){
+            var time =this.value2;
+            var startHour=time.substring(0,2);
+            var startMin=time.substring(2);
+            var i=0;
+            while (startHour<24) {
+                i++;
+                startHour++;
+            }
+            var lastHour=0
+            while(i<6){
+                i++;
+                lastHour++
+            }
+            lastHour='0'+lastHour;
+            this.lastTime=lastHour+startMin;
+            this.initWebSocket();
+        },
         //获取账号
         getaccount(){
             var account=localStorage.getItem('ms_username');
@@ -118,31 +139,56 @@ export default {
             }   
           })
         },
-
-        getData() {
-            this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`).then((res)=> {
-            this.tableData = res.data.data
-            this.total = res.data.data.length-1;
-            this.loading = false;  
-            const data = res.data.data;
-            this.allTableData = data;
+          // 初始页currentPage、初始每页数据数pagesize和数据data
+        handleSizeChange: function (size) {
+            this.pagesize = size;
+        },
+        handleCurrentChange: function(currentPage){
+            this.currentPage = currentPage;
+        },
+        initWebSocket(){ //初始化weosocket
+            const wsuri = "ws://192.168.0.133:3000/";
+            this.websock = new WebSocket(wsuri);
+            this.websock.onmessage = this.websocketonmessage;
+            this.websock.onopen = this.websocketonopen;
+            this.websock.onerror = this.websocketonerror;
+            this.websock.onclose = this.websocketclose;
+        },
+        websocketonopen(){ //连接建立之后执行send方法发送数据
+            let actions = {"send":"1"};
+            console.log('连接成功！');
+            this.websocketsend(JSON.stringify(actions));
+        },
+        websocketonerror(){//连接建立失败重连
+            this.initWebSocket();
+        },
+        websocketonmessage(e){ //数据接收
+            var fd  = new FormData()
+            fd.append("startTime",this.value2)
+            fd.append("lastTime",this.lastTime)
+            this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`,fd).then(res =>{
+                if(res.data.success=='success')
+                {
+                    this.tableData = res.data.data
+                }else{
+                    this.tableData=[]
+                }
+                let actions = {"rec":this.tableData};
+                this.websocketsend(JSON.stringify(actions));
+                
             })
         },
+        websocketsend(Data){//数据发送
+            this.websock.send(Data);
+        },
+        websocketclose(e){  //关闭
+            console.log('断开连接',e);
+        },    
 
-
-
-        // 触发搜索按钮
         handleSearch() {
             this.$set(this.query, 'pageIndex', 1);
-            // this.getData();
         },
-        // //推送操作
-        // push(index, row) {
-        //         this.$message.success('推送成功');
-        //         this.tableData.splice(index, 1);
-        //       //  console.log(this.tableData);
-        // },
-        // 多选操作
+
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
@@ -156,11 +202,6 @@ export default {
             this.$message.error(`推送了${str}`);
             this.multipleSelection = [];
         },
-        // 分页导航
-        handlePageChange(val) {
-            this.$set(this.query, 'pageIndex', val);
-            this.getData();
-        }
     }
 };
 </script>
