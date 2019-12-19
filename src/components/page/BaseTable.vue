@@ -132,7 +132,7 @@ export default {
             this.currentPage = currentPage;
         },
         initWebSocket(){ //初始化weosocket
-            const wsuri = "ws://127.0.0.1:3000/";
+            const wsuri = "ws://192.168.0.133:3000/";
             this.websock = new WebSocket(wsuri);
             this.websock.onmessage = this.websocketonmessage;
             this.websock.onopen = this.websocketonopen;
