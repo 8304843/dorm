@@ -13,7 +13,6 @@
             </div>
             <!-- :data="searchUserinfo(keyUser)" -->
             <el-table
-                
                 border
                 class="table"
                 ref="multipleTable"
@@ -25,14 +24,13 @@
                 <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
                 <el-table-column prop="username" label="姓名" align="center" width="80%"></el-table-column>
                 <el-table-column prop="number" label="学号" align="center"></el-table-column>
-                <el-table-column prop="college" label="二级学院" align="center"></el-table-column>
                 <el-table-column prop="class" label="班级" align="center"></el-table-column>
+                <el-table-column prop="college" label="二级学院" align="center"></el-table-column>
+                <el-table-column type="dorm_floor" label="楼栋号" align="center"></el-table-column>
                 <el-table-column prop="dorm_num" label="宿舍号" align="center"></el-table-column>
                 <el-table-column prop="rge_time" label="录入时间" align="center"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-star-off" @click="handlecheck(scope.$index, scope.row)"
-                        >查看</el-button>
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"
                         >编辑</el-button>
                         <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)"
@@ -105,13 +103,27 @@ export default {
         //搜索
         searchUserinfo(keyUser) {
           console.log(keyUser)
-          
         },
-        // 编辑操作
+        //编辑
         handleEdit(index, row) {
             this.dialogEdit.show = true;
             this.form = {
             }
+        },
+        //删除
+        handleDelete(index,row){
+            //数据从视图获取无法删除视图数据
+            var fd = new FormData()
+            fd.append('flag','delete_info')
+            fd.append('cardId',row.cardId)
+            fd.append('account',localStorage.getItem('ms_username'))
+            this.$axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`,fd).then(res =>{
+                if(res.data.success=='error'){
+                    this.$message.error('你无权操作！！！')
+                }else{
+                    this.$message.success('删除成功')
+                }
+            })  
         },
         //批量删除
         delAllSelection() {
@@ -132,15 +144,19 @@ export default {
             this.currentPage = currentPage;
         },
         initWebSocket(){ //初始化weosocket
-            const wsuri = "ws://192.168.0.133:3000/";
-            this.websock = new WebSocket(wsuri);
-            this.websock.onmessage = this.websocketonmessage;
-            this.websock.onopen = this.websocketonopen;
-            this.websock.onerror = this.websocketonerror;
-            this.websock.onclose = this.websocketclose;
+            if ('WebSocket' in window) {
+                const wsuri = "ws://192.168.0.133:3000/";
+                this.websock = new WebSocket(wsuri);
+                this.websock.onmessage = this.websocketonmessage;
+                this.websock.onopen = this.websocketonopen;
+                this.websock.onerror = this.websocketonerror;
+                this.websock.onclose = this.websocketclose;
+            }else {
+                console.log('当前浏览器 Not support websocket');                
+            }
         },
         websocketonopen(){ //连接建立之后执行send方法发送数据
-            let actions = {"send":"1"};
+            let actions = {"send":"start_flag"};
             console.log('连接成功！');
             this.websocketsend(JSON.stringify(actions));
         },
@@ -149,7 +165,7 @@ export default {
         },
         websocketonmessage(e){ //数据接收
             var fd  = new FormData()
-            fd.append("flag",this.flag)
+            fd.append("flag",'get_students_info')
             this.$axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`,fd).then(res =>{
                 this.tableData = res.data.data
                 let actions = {"rec":this.tableData};

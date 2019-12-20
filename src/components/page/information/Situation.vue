@@ -16,67 +16,80 @@
                 <el-col :span="18">
                     <el-divider content-position="left">基本信息</el-divider>
                 </el-col>
-                <el-button type="primary" class="save_btn1" @click="savebaseinfo('form_base')" >保存</el-button>
+                <!-- @click="savebaseinfo('form_base')" -->
+                <el-button type="primary" class="save_btn1" >保存</el-button>
             </el-row>
-            <el-form ref="form_base" :model="form" :rules="rules" label-width="110px" class="form">
+            <el-form ref="form_base" :model="form"  label-width="110px" class="form">
                 <br/>
                 <el-row class="row">
                     <el-col :span="5">
-                        <el-form-item  label="姓名" prop="username">
-                            <el-input v-model="form.username" placeholder="name"></el-input>
+                        <el-form-item  label="姓名">
+                            <el-input v-model="tableData_base.username" placeholder="name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
-                        <el-form-item label="学号" prop="number">
-                            <el-input v-model="form.number" placeholder="number" readonly></el-input>
+                        <el-form-item label="学号">
+                            <el-input v-model="tableData_base.number" placeholder="number" readonly></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="row">
                     <el-col :span="5">
                         <el-form-item label="班级">
-                            <el-input v-model="form.name2" placeholder="class"></el-input>
+                            <el-input v-model="tableData_base.class" placeholder="class" readonly></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
                         <el-form-item label="学院" >
-                            <el-input v-model="form.name3" placeholder="college"></el-input>
+                            <el-input v-model="tableData_base.college" placeholder="college"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="row">
                     <el-col :span="5">
                         <el-form-item label="联系电话">
-                            <el-input v-model="form.name1" placeholder="phnoe"></el-input>
+                            <el-input v-model="tableData_base.phone" placeholder="phnoe" readonly></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
                         <el-form-item label="身份证" >
-                            <el-input v-model="form.cardId" placeholder="cardId"></el-input>
+                            <el-input v-model="tableData_base.cardId" placeholder="cardId" readonly></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="row">
                     <el-col :span="5">
-                        <el-form-item label="楼栋" prop="dorm_floor">
-                            <el-input v-model="form.dorm_floor" placeholder="dorm_floor(人脸底库编号)"></el-input>
+                        <el-form-item label="楼栋">
+                            <el-input v-model="tableData_base.dorm_floor" placeholder="dorm_floor" readonly></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
-                        <el-form-item label="宿舍号" prop="dorm_num">
-                            <el-input v-model="form.dorm_num" placeholder="dorm_num"></el-input>
+                        <el-form-item label="宿舍号">
+                            <el-input v-model="tableData_base.dorm_num" placeholder="dorm_num" readonly></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="row">
                     <el-col :span="5">
                         <el-form-item label="性别">
-                            <el-input v-model="form.name2" placeholder="sex"></el-input>
+                            <el-input v-model="tableData_base.sex" placeholder="sex"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="5">
+                        <el-form-item label="专业">
+                            <el-input v-model="tableData_base.major" placeholder="专业"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="row">
+                    <el-col :span="5">
+                        <el-form-item label="籍贯">
+                            <el-input v-model="tableData_base.natives" placeholder="籍贯"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="5">
                         <el-form-item label="邮箱">
-                            <el-input v-model="form.name3" placeholder="邮箱"></el-input>
+                            <el-input v-model="tableData_base.email" placeholder="邮箱"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -134,72 +147,29 @@
       return {
         loading: false,
         id:'',
-        form: {
-          useranme: 'admin',
+        form:{
           username: '',
-          name: '',
           email: '',
           number:''
         },
+        tableData_base: [],
         imageUrl: '',
-        rules: {
-          username:[{required:true,message:"用户名不能为空",trigger:"blur"}],
-          email: [
-            {required: true, message: '请输入邮箱', trigger: 'blur'},
-            {type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change'}
-          ],
-          dorm_num:[{required:true,message:"宿舍号不能为空",trigger:"blur"}],
-          dorm_floor:[{required:true,message:"宿舍楼栋不能为空",trigger:"blur"}],
-        },
       }
     },
     created(){
-      // console.log(localStorage.getItem('userId'))//用户编码
-      
+      //个人信息
+      this.number=localStorage.getItem('ms_username');
+      var fd  = new FormData()
+      fd.append("flag",this.number)
+      this.$axios.post(`http://localhost:8081/dormphp/src/Person_Info.php`,fd).then(res =>{
+        this.tableData_base = res.data.data[0]
+        this.imageUrl ='http://192.168.0.167:8380/'+this.tableData_base.FACE_URL
+        })
     },
     mounted() {
       this.form.number=localStorage.getItem('ms_username');
     },
     methods: {
-      //个人信息
-      
-      //添加人脸接口
-      addfaceApi(facegroupId){
-        var imageData = localStorage.getItem('photo_base64')
-        imageData = imageData.replace(/^data:image\/\w+;base64,/, "")
-        var fd  = new Array()
-        var fd = 
-          {
-            name:this.form.username,
-            carId:this.form.cardId,
-            natives:"广东",
-            groupId:facegroupId,
-            imageData:imageData,
-            userId:"c11aa5249fb64ba5bfc10f93e123320a",
-            race:"",
-            remark:""
-          }
-        this.$axios.post(`/api/cw-afaps/extService/face/add`,fd).then(res =>{
-          this.$message.success('保存成功！')
-        })  
-      },
-      //查询人脸库接口
-      checkfacegroupId(){
-        var fd  = new Array()
-        var fd = 
-        {
-          userId:'c11aa5249fb64ba5bfc10f93e123320a', //人员编号 
-        }
-        //获取人脸库名称及人脸库id
-        this.$axios.post(`/api/cw-afaps/extService/faceGroup/select`,fd).then(res =>{
-          for(var i=0;i<2;i++){
-            if(this.form.dorm_floor==res.data.data.datas[i].name){//用宿舍楼号获取人脸库id
-              var facegroupId =res.data.data.datas[i].id
-            }
-          }
-          this.addfaceApi(facegroupId)
-        })
-      },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -232,29 +202,68 @@
         }
         return isJPG && isLt2M;
       },
-      savebaseinfo(form_base){
-      this.checkfacegroupId()
-      this.$refs[form_base].validate(valid => {
-          if (valid) {
-            localStorage.setItem('state', '注册');
-            var fd  = new FormData()
-            fd.append("username",this.form.username)
-            fd.append("number",this.form.number)
-            fd.append("class",this.form.class)
-            fd.append("college",this.form.college)
-            fd.append("phone",this.form.phone)
-            fd.append("carId",this.form.carId)
-            fd.append("dorm_floor",this.form.dorm_floor)
-            fd.append("dorm_num",this.form.dorm_num)
-            fd.append("sex",this.form.sex)
-            fd.append("email",this.form.email)
-            fd.append("state",1)     
-            this.$axios.post(`http://localhost:8081/dormphp/src/UpState.php`,fd).then(res =>{
-              console.log(res) 
-            })
-          }
-        });
-      }, 
+      //*******************************接口暂时放下***************************************
+      //添加人脸接口
+      // addfaceApi(facegroupId){
+      //   var imageData = localStorage.getItem('photo_base64')
+      //   imageData = imageData.replace(/^data:image\/\w+;base64,/, "")
+      //   var fd  = new Array()
+      //   var fd = 
+      //     {
+      //       name:this.form.username,
+      //       carId:this.form.cardId,
+      //       natives:"广东",
+      //       groupId:facegroupId,
+      //       imageData:imageData,
+      //       userId:"c11aa5249fb64ba5bfc10f93e123320a",
+      //       race:"",
+      //       remark:""
+      //     }
+      //   this.$axios.post(`/api/cw-afaps/extService/face/add`,fd).then(res =>{
+      //     this.$message.success('保存成功！')
+      //   })  
+      // },
+      // //查询人脸库接口
+      // checkfacegroupId(){
+      //   var fd  = new Array()
+      //   var fd = 
+      //   {
+      //     userId:'c11aa5249fb64ba5bfc10f93e123320a', //人员编号 
+      //   }
+      //   //获取人脸库名称及人脸库id
+      //   this.$axios.post(`/api/cw-afaps/extService/faceGroup/select`,fd).then(res =>{
+      //     for(var i=0;i<2;i++){
+      //       if(this.form.dorm_floor==res.data.data.datas[i].name){//用宿舍楼号获取人脸库id
+      //         var facegroupId =res.data.data.datas[i].id
+      //       }
+      //     }
+      //     this.addfaceApi(facegroupId)
+      //   })
+      // },
+      // savebaseinfo(form_base){
+      // this.checkfacegroupId()
+      // this.$refs[form_base].validate(valid => {
+      //     if (valid) {
+      //       localStorage.setItem('state', '注册');
+      //       var fd  = new FormData()
+      //       fd.append("username",this.form.username)
+      //       fd.append("number",this.form.number)
+      //       fd.append("class",this.form.class)
+      //       fd.append("college",this.form.college)
+      //       fd.append("phone",this.form.phone)
+      //       fd.append("carId",this.form.carId)
+      //       fd.append("dorm_floor",this.form.dorm_floor)
+      //       fd.append("dorm_num",this.form.dorm_num)
+      //       fd.append("sex",this.form.sex)
+      //       fd.append("email",this.form.email)
+      //       fd.append("state",1)     
+      //       this.$axios.post(`http://localhost:8081/dormphp/src/UpState.php`,fd).then(res =>{
+      //         console.log(res) 
+      //       })
+      //     }
+      //   });
+      // }, 
+      //*******************************接口暂时放下***************************************
     }
   }
 </script>
