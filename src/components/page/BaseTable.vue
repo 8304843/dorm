@@ -26,9 +26,15 @@
                 <el-table-column prop="number" label="学号" align="center"></el-table-column>
                 <el-table-column prop="class" label="班级" align="center"></el-table-column>
                 <el-table-column prop="college" label="二级学院" align="center"></el-table-column>
-                <el-table-column type="dorm_floor" label="楼栋号" align="center"></el-table-column>
+                <el-table-column prop="dorm_floor" label="楼栋号" align="center"></el-table-column>
                 <el-table-column prop="dorm_num" label="宿舍号" align="center"></el-table-column>
                 <el-table-column prop="rge_time" label="录入时间" align="center"></el-table-column>
+                <el-table-column prop="natives" label="籍贯" align="center" v-if="hideRow"></el-table-column>
+                <el-table-column prop="sex" label="性别" align="center" v-if="hideRow"></el-table-column>
+                <el-table-column prop="major" label="专业" align="center" v-if="hideRow"></el-table-column>
+                <el-table-column prop="email" label="邮箱" align="center" v-if="hideRow"></el-table-column>
+                <el-table-column prop="phone" label="电话" align="center" v-if="hideRow"></el-table-column>
+                <!-- <el-table-column prop="class" label="班级" align="center" v-if="hideRow"></el-table-column> -->
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)"
@@ -58,7 +64,6 @@
 
 <script>
 import EditUser from "../common/EditUser"
-import axios from "axios";
 export default {
     name: 'basetable',
     data() {
@@ -76,13 +81,14 @@ export default {
             form: {},
             keyUser:'',
             formDate:{},
+            hideRow: false,
             formrules:{
-                name:[{required:true,message:"用户名不能为空",trigger:"blur"}],
+                username:[{required:true,message:"用户名不能为空",trigger:"blur"}],
                 college:[{required:true,message:"二级学院不能为空",trigger:"blur"}],
                 classmate:[{required:true,message:"班级信息不能为空",trigger:"blur"}],
                 xuehao:[{required:true,message:"学号不能为空",trigger:"blur"}],
                 dorm:[{required:true,message:"宿舍号不能为空",trigger:"blur"}],
-            }
+            },
         };
     },
     created() {
@@ -106,13 +112,36 @@ export default {
         },
         //编辑
         handleEdit(index, row) {
-            this.dialogEdit.show = true;
-            this.form = {
-            }
+            var fd = new FormData()
+            fd.append('flag','edit_info')
+            fd.append('cardId',row.cardId)
+            fd.append('account',localStorage.getItem('ms_username'))
+            this.$axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`,fd).then(res =>{
+                if(res.data.success=='error'){
+                    this.$message.error('你无权操作！！！')
+                }else{
+                    this.dialogEdit.show = true;
+                    this.form = {
+                        username: row.username,
+                        number: row.number,
+                        sex: row.sex,
+                        college: row.college,
+                        dorm_floor: row.dorm_floor,
+                        dorm_num:row.dorm_num,
+                        class: row.class,
+                        phone: row.phone,
+                        cardId: row.cardId,
+                        major: row.major,
+                        email: row.email,
+                        natives: row.natives,
+                        rge_time: row.rge_time,
+                        FACE_URL:'http://192.168.0.167:8380/'+row.FACE_URL
+                    }
+                }
+            }) 
         },
         //删除
         handleDelete(index,row){
-            //数据从视图获取无法删除视图数据
             var fd = new FormData()
             fd.append('flag','delete_info')
             fd.append('cardId',row.cardId)

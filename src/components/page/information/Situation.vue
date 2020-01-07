@@ -1,7 +1,7 @@
 @@ -0,0 +1,219 @@
 <template>
   <div class="container">
-        <div id="app">
+        <div id="app" class="Stitu">
              <el-upload
                 class="avatar-uploader"
                 action="https://jsonplaceholder.typicode.com/posts/"
@@ -269,7 +269,7 @@
 </script>
 
 <style>
-  .avatar-uploader .el-upload {
+.Stitu .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9 ! important;
     border-radius: 6px ! important;
     top: 130px ! important;
@@ -278,10 +278,10 @@
     overflow: hidden ! important;
     width: 180px ! important;
   }
-  .avatar-uploader .el-upload:hover {
+.avatar-uploader .el-upload:hover {
     border-color: #409EFF! important;
   }
-  .avatar-uploader-icon {
+ .avatar-uploader-icon {
     font-size: 28px ! important;
     color: #8c939d;
     width: 178px;
@@ -289,7 +289,7 @@
     line-height: 178px;
     text-align: center;
   }
-  .avatar {
+.avatar {
     width: 178px;
     height: 178px;
     display: block;
