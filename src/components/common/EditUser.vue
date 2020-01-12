@@ -1,6 +1,6 @@
 <template id="hellooo">
     <div class="hello">
-        <el-dialog title="编辑学生信息" :modal-append-to-body="false" :visible.sync="dialogEdit.show">
+        <el-dialog :title="ban?'学生详细信息':'编辑学生信息'"  :modal-append-to-body="false" :visible.sync="dialogEdit.show">
             <el-form :model="form" ref="formEdit" label-width="100px" :rules="formrules">
                 <el-form-item label="头像" prop="photo">
                     <template slot-scope="scope" class="parent">
@@ -16,31 +16,34 @@
                         </el-upload>
                     </template>
                 </el-form-item>
-                <el-form-item label="姓名" prop="username">
-                    <el-input v-model="form.username"></el-input>
+                <el-form-item label="姓名" prop="username" >
+                    <el-input v-model="form.username" :readonly="ban" ></el-input>
                 </el-form-item>
                 <el-form-item label="班级" prop="class">
-                    <el-input v-model="form.class"></el-input>
+                    <el-input v-model="form.class" :readonly="ban" ></el-input>
                 </el-form-item>
                 <el-form-item label="学院" prop="college">
-                    <el-input v-model="form.college"></el-input>
+                    <el-input v-model="form.college" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="专业" prop="major">
-                    <el-input v-model="form.major"></el-input>
+                    <el-input v-model="form.major" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="学号" prop="number">
-                    <el-input v-model="form.number"></el-input>
+                    <el-input v-model="form.number" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="身份证号" prop="cardId">
-                    <el-input v-model="form.cardId" readonly></el-input>
+                    <el-input v-model="form.cardId" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="宿舍楼栋" prop="dorm_floor">
-                    <el-input v-model="form.dorm_floor"></el-input>
+                    <el-input v-model="form.dorm_floor" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="宿舍号" prop="dorm_num">
-                    <el-input v-model="form.dorm_num"></el-input>
+                    <el-input v-model="form.dorm_num" :readonly="ban"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" prop="sex">
+                <el-form-item label="宿舍号" prop="sex" v-if="ban" >
+                    <el-input v-model="form.dorm_num" :readonly="ban"></el-input>
+                </el-form-item>
+                <el-form-item label="性别" prop="sex" v-else>
                     <el-select v-model="form.sex" style="width:100%;" placeholder="请选择">
                         <el-option
                             v-for="item in options1"
@@ -50,20 +53,20 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="form.email"></el-input>
+                <el-form-item label="邮箱" prop="email" >
+                    <el-input v-model="form.email" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="联系电话" prop="phone">
-                    <el-input v-model="form.phone"></el-input>
+                    <el-input v-model="form.phone" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="籍贯" prop="natives">
-                    <el-input v-model="form.natives"></el-input>
+                    <el-input v-model="form.natives" :readonly="ban"></el-input>
                 </el-form-item>
                 <el-form-item label="录入时间" prop="rge_time">
-                    <el-input v-model="form.rge_time" readonly></el-input>
+                    <el-input v-model="form.rge_time" :readonly="ban"></el-input>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer" class="dialog-footer" v-if="!ban">
                 <el-button @click="dialogFormClose('formEdit')">取 消</el-button>
                 <el-button type="primary" @click="dialogFormEdit('formEdit')">确 定</el-button>
             </div>
@@ -77,7 +80,8 @@ export default {
     props: {
         dialogEdit: Object,
         form: Object,
-        imageUrl: ''
+        imageUrl: '',
+        type:''
     },
     data() {
         return {
@@ -108,8 +112,13 @@ export default {
         };
     },
     created() {
-        
+
     },
+    computed: {
+        ban: function () {
+            return (this.type=='details'?true:false);
+        }
+  },
     methods: {
         dialogFormEdit(formEdit) {
             var fd = new FormData();

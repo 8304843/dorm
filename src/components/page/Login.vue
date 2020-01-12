@@ -43,10 +43,10 @@ export default {
         };
     },
     created() {
-        this.$axios.post(`http://localhost:8081/yuyanphp/user/userId.php`).then(res=>{//可以注释掉
-            this.userId=res.data.data[0].id
-            localStorage.setItem('userId',this.userId)
-        })
+        // this.$axios.post(`http://localhost:8081/yuyanphp/user/userId.php`).then(res=>{//可以注释掉
+        //     this.userId=res.data.data[0].id
+        //     localStorage.setItem('userId',this.userId)
+        // })
     },
     methods: {
         submitForm() {

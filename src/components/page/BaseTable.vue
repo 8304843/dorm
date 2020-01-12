@@ -57,7 +57,7 @@
             </div>
         </div>
         <!-- 编辑弹出框 -->
-        <EditUser :dialogEdit="dialogEdit" :form="form"></EditUser>
+        <EditUser :dialogEdit="dialogEdit" :form="form" :type="type"></EditUser>
         <!-- 编辑弹出框 -->
     </div>
 </template>
@@ -68,6 +68,7 @@ export default {
     name: 'basetable',
     data() {
         return {
+            type:'edit',
             currentPage:1, //初始页
             pagesize:10,    //    每页的数据
             dialogEdit: {

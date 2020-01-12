@@ -26,10 +26,10 @@
             >
                 <el-table-column type="selection" width="55" align="center"></el-table-column>
                 <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
+                <el-table-column prop="username" label="用户名"></el-table-column>
                 <el-table-column prop="class" label="班级"></el-table-column>
-                <el-table-column prop="dormfloor" label="栋号"></el-table-column>
-                <el-table-column prop="dorm" label="宿舍"></el-table-column>
+                <el-table-column prop="dorm_floor" label="栋号"></el-table-column>
+                <el-table-column prop="dorm_num" label="宿舍"></el-table-column>
                 <el-table-column prop="backtime" label="回宿舍时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template slot-scope="scope">
@@ -51,14 +51,23 @@
                 ></el-pagination>
             </div>
         </div>
+        <!-- 编辑弹出框 -->
+        <EditUser :dialogEdit="dialogEdit" :form="form" :type="type"></EditUser>
+        <!-- 编辑弹出框 -->
     </div>
 </template>
 
 <script>
+import EditUser from "../common/EditUser"
+import axios from "axios";
 export default {
     name: 'late_recod',
+    components: {
+        EditUser
+	},
     data() {
         return {
+            type:'details',//查看详情
             currentPage: 1, //初始页
             pagesize: 10, //    每页的数据
             query: {
@@ -67,6 +76,9 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
+            dialogEdit: {
+              show: false
+            }, 
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -75,22 +87,63 @@ export default {
             form: {},
             idx: -1,
             id: -1,
-            flag: false,
+            flag: 'show',
             value: '23:30',
             value2: '23:30：00',
             lastTime: '05:30:00'
         };
     },
+    computed: {
+      newName() {
+        return this.query.name;
+      }
+    },
     watch: {
         value(val, newval) {
             this.value2 = val + ':00';
             this.selectTime();
-        }
+        },
+        newName(val) {
+            if(val=='')
+            {
+                this.flag='show';
+            }
+      }
     },
     created() {
         this.initWebSocket();
     },
     methods: {
+        //查看详情
+        handleEdit(index, row) {
+            var fd = new FormData()
+            fd.append('flag','edit_info')
+            fd.append('cardId',row.cardId)
+            fd.append('account',localStorage.getItem('ms_username'))
+            this.$axios.post(`http://localhost:8081/dormphp/src/Mes_Show.php`,fd).then(res =>{
+                if(res.data.success=='error'){
+                    this.$message.error('你无权操作！！！')
+                }else{
+                    this.dialogEdit.show = true;
+                    this.form = {
+                        username: row.username,
+                        number: row.number,
+                        sex: row.sex,
+                        college: row.college,
+                        dorm_floor: row.dorm_floor,
+                        dorm_num:row.dorm_num,
+                        class: row.class,
+                        phone: row.phone,
+                        cardId: row.cardId,
+                        major: row.major,
+                        email: row.email,
+                        natives: row.natives,
+                        rge_time: row.rge_time,
+                        FACE_URL:'http://192.168.0.167:8380/'+row.FACE_URL
+                    }
+                }
+            }) 
+        },
         //选择时间
         selectTime() {
             var time = this.value2;
@@ -141,15 +194,31 @@ export default {
             var fd = new FormData();
             fd.append('startTime', this.value2);
             fd.append('lastTime', this.lastTime);
-            this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`, fd).then(res => {
-                if (res.data.success == 'success') {
-                    this.tableData = res.data.data;
-                } else {
-                    this.tableData = [];
-                }
-                let actions = { rec: this.tableData };
-                this.websocketsend(JSON.stringify(actions));
-            });
+            var flag=this.flag;
+            if(flag=='show'){
+                fd.append('flag', flag);
+                this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`, fd).then(res => {
+                    if (res.data.success == 'success') {
+                        this.tableData = res.data.data;
+                    } else {
+                        this.tableData = [];
+                    }
+                    let actions = { rec: this.tableData };
+                    this.websocketsend(JSON.stringify(actions));
+                });
+            }else{
+                fd.append('flag', flag);
+                fd.append('name', this.query.name);
+                this.$axios.post(`http://localhost:8081/dormphp/src/LateShow.php`, fd).then(res => {
+                    if (res.data.success == 'success') {
+                        this.tableData = res.data.data;
+                    } else {
+                        this.tableData = [];
+                    }
+                    let actions = { rec: this.tableData };
+                    this.websocketsend(JSON.stringify(actions));
+                });
+            }
         },
         websocketsend(Data) {
             //数据发送
@@ -160,8 +229,13 @@ export default {
             console.log('断开连接', e);
         },
         handleSearch() {
+            //搜索
             this.$set(this.query, 'pageIndex', 1);
+            if(this.query.name!=''){
+                this.flag='searchName';
+            }
         },
+
         handleSelectionChange(val) {
             this.multipleSelection = val;
         },
